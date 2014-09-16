@@ -8,10 +8,14 @@ import string
 import nltk 
 import enchant
 from nltk.stem.porter import *
+from nltk.collocations import *
 
 
 """initializing stemmer to PorterStemmer"""
 stemmer = PorterStemmer()
+
+"""initializing bigram association measure"""
+bigram_measures = nltk.collocations.BigramAssocMeasures()
 
 def isAscii(s):
     """method for determining whether all the characters in a string is ascii or not"""
@@ -265,7 +269,21 @@ def getTweetSpellCheckInfo(tweet):
 
 
 def getTweetBigrams(tweet):
-    pass
+    """gets all the bigrams from the tweet"""
+    
+    bigramList = []
+    tweetTokens = getTweetTokens(tweet)
+    if len(tweetTokens) == 0:
+        pass
+    else:
+        finder = BigramCollocationFinder.from_words(tweetTokens)
+        bigrams = finder.nbest(bigram_measures.raw_freq, 10)
+        
+        for entries in bigrams:
+            bigramList.append(entries[0]+" "+entries[1])
+            
+    return bigramList
+
 
 
 #def getNoOfNouns(taggedTokens):
