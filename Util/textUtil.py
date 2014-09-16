@@ -213,7 +213,55 @@ def getRawTweetTokenPOSTags(tweet):
 
 
 def getTweetSpellCheckInfo(tweet):
-    pass
+    """method for checking the number of rightly spelled and misspelled words in a tweet.
+    It returns the following information:
+    1. ratio of words wrongly spelled
+    2. ratio of words wrongly spelled
+    3. list of correctly spelled words
+    4. list of misspelled words
+    5. no of correctly spelled words
+    6. no of misspelled words
+    """
+    
+    tweetSpellingInfo = {"correctlySpelledWords":[],"misspelledWords":[],"noOfCorrectlySpelledWords":0,"noOfMisspelledWords":0,"correctlySpelledRatio":0,"misspellingRatio":0}
+    
+    tweetTokens = getTweetTokens(tweet)
+    totalTokens = len(tweetTokens)
+    
+    misspellingRatio = 0
+    correctlySpelledRatio = 0
+    
+    misspelledWords = []
+    correctlySpelledWords = []
+    
+    noOfMisspelledWords = 0
+    noOfCorrectlySpelledWords = 0
+    
+    
+    if totalTokens == 0:
+        return tweetSpellingInfo
+    else:
+        d = enchant.Dict("en_US")
+        
+        misspelledWords = [word for word in tweetTokens if d.check(word) == False]
+        tweetSpellingInfo["misspelledWords"] = misspelledWords
+        
+        noOfMisspelledWords = len(misspelledWords)
+        tweetSpellingInfo["noOfMisspelledWords"] = noOfMisspelledWords
+        
+        correctlySpelledWords = [word for word in tweetTokens if d.check(word) == True]
+        tweetSpellingInfo["correctlySpelledWords"] = correctlySpelledWords
+        
+        noOfCorrectlySpelledWords = len(correctlySpelledWords)
+        tweetSpellingInfo["noOfCorrectlySpelledWords"] = noOfCorrectlySpelledWords
+        
+        misspellingRatio = float(noOfMisspelledWords)/float(totalTokens)
+        tweetSpellingInfo["misspellingRatio"] = misspellingRatio
+        
+        correctlySpelledRatio = float(totalTokens - noOfMisspelledWords )/float(totalTokens)
+        tweetSpellingInfo["correctlySpelledRatio"] = correctlySpelledRatio
+        
+        return tweetSpellingInfo
 
 
 def getTweetBigrams(tweet):
