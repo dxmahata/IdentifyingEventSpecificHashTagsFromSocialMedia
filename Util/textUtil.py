@@ -69,16 +69,6 @@ def getTweetText(tweet):
     return tweet["text"]
 
 
-def getTweetHashTags(tweet):
-    """method for getting all the hashtags mentioned in a tweet from its json representation"""
-    return [hashTag["text"].lower() for hashTag in tweet["entities"]["hashtags"]]
-
-
-def getTweetAsciiHashTags(tweet):
-    """method for getting all the hashtags mentioned in a tweet from its json representation"""
-    return [hashTag["text"].lower() for hashTag in tweet["entities"]["hashtags"] if isAscii(hashTag["text"])]
-
-
 
 def getTweetTokens(tweet):
     """method for getting the clean tokens from the text of a tweet after transforming all the letters into lowercase"""
