@@ -287,7 +287,7 @@ def getTweetBigrams(tweet):
 
 
 def getNoOfNouns(taggedTokens):
-    """method for counting the number of nouns used in a tweet"""
+    """method for counting the number of nouns used in a tweet written in english"""
     noNoun = 0
     for token in taggedTokens:
         if token[1][0] == "N":
@@ -296,7 +296,7 @@ def getNoOfNouns(taggedTokens):
 
 
 def getNoOfAdjectives(taggedTokens):
-    """method for counting the number of adjectives used in a tweet"""
+    """method for counting the number of adjectives used in a tweet written in english"""
     noAdj = 0
     for token in taggedTokens:
         if token[1][0] == "J":
@@ -305,7 +305,7 @@ def getNoOfAdjectives(taggedTokens):
 
 
 def getNoOfPrepositions(taggedTokens):
-    """method for counting the number of prepositions used in a tweet"""
+    """method for counting the number of prepositions used in a tweet written in english"""
     noPrep = 0
     for token in taggedTokens:
         if token[1] == "IN":
@@ -314,7 +314,7 @@ def getNoOfPrepositions(taggedTokens):
 
 
 def getNoOfPronouns(taggedTokens):
-    """method for counting the number of pronouns used in a tweet"""
+    """method for counting the number of pronouns used in a tweet written in english"""
     noPronoun = 0
     for token in taggedTokens:
         if token[1] == "PRP" or token[1] == "PRP$":
@@ -323,7 +323,7 @@ def getNoOfPronouns(taggedTokens):
 
 
 def getNoOfVerbs(taggedTokens):
-    """method for counting the number of verbs in a tweet"""
+    """method for counting the number of verbs in a tweet written in english"""
     noVerb = 0
     for token in taggedTokens:
         if token[1][0] == "V":
@@ -332,7 +332,7 @@ def getNoOfVerbs(taggedTokens):
 
 
 def getNoOfAdVerbs(taggedTokens):
-    """method for counting the number of adverbs used in a tweet"""
+    """method for counting the number of adverbs used in a tweet written in english"""
     noAdVerb = 0
     for token in taggedTokens:
         if token[1][0] == "R":
@@ -341,12 +341,21 @@ def getNoOfAdVerbs(taggedTokens):
 
 
 def getNoOfInterjections(taggedTokens):
-    """method for counting the number of interjections used in a tweet"""
+    """method for counting the number of interjections used in a tweet written in english"""
     noInterjection = 0
     for token in taggedTokens:
         if token[1] == "UH":
             noInterjection += 1
     return noInterjection
+
+
+def getNoOfArticles(taggedTokens):
+    """method for getting the count of articles used in a tweet written in english"""
+    noArticles = 0
+    for token in taggedTokens:
+        if token[0].lower() in ["the", "an", "a", "some"]:
+            noArticles += 1
+    return noArticles
 
 
 def getTweetTextFormality(tweet):
@@ -356,7 +365,8 @@ def getTweetTextFormality(tweet):
         formalityIndex = -10.0
     else:
         taggedTokens = nltk.pos_tag(tweetTokens)
-        formalityIndex = float(((getNoOfNouns(taggedTokens)+getNoOfAdjectives(taggedTokens)+getNoOfPrepositions(taggedTokens))-(getNoOfPronouns(taggedTokens)+getNoOfVerbs(taggedTokens)+getNoOfAdVerbs(taggedTokens)+getNoOfInterjections(taggedTokens))))/2.0
+        formalityIndex = float((getNoOfArticles(taggedTokens)+(getNoOfNouns(taggedTokens)+getNoOfAdjectives(taggedTokens)+getNoOfPrepositions(taggedTokens))-(getNoOfPronouns(taggedTokens)+getNoOfVerbs(taggedTokens)+getNoOfAdVerbs(taggedTokens)+getNoOfInterjections(taggedTokens))+100.0))/2.0
+        #formalityIndex = float(((getNoOfNouns(taggedTokens)+getNoOfAdjectives(taggedTokens)+getNoOfPrepositions(taggedTokens))-(getNoOfPronouns(taggedTokens)+getNoOfVerbs(taggedTokens)+getNoOfAdVerbs(taggedTokens)+getNoOfInterjections(taggedTokens))))/2.0
     return formalityIndex
 
 
